@@ -27,7 +27,7 @@
                 <p>Kostprijs los nummer: {{ magazine.prijs }}</p>
             </div>
         </div>
-        <form method="post">    
+        <form id="form_magazine" method="post">    
             <label for="naam">Naam:</label>
             <input type="text" name="naam" id="naam">
             <label for="doelgroep">Doelgroep:</label>
@@ -54,11 +54,27 @@
 
             methods: {
                 voegMagazineToe: function () {
-                    
+                    let naamTxt = document.getElementById('naam').value;
+                    let doelgroepTxt = document.getElementById('doelgroep').value;
+                    let prijsTxt = document.getElementById('prijs').value;
+                    if (naamTxt.length == 0) {
+                        alert('Gelieve minstens de naam in te geven');
+                        event.preventDefault();
+                    }
+                    else {
+                        this.magazines.push({naam: naamTxt, doelgroep: doelgroepTxt, prijs: prijsTxt});
+                        document.getElementById('form_magazine').reset();
+                        // document.getElementById('naam').value = '';
+                        // document.getElementById('doelgroep').value = '';
+                        // document.getElementById('prijs').value = '';
+                        event.preventDefault();
+                    }
                 }
             }
         }
         Vue.createApp(app).mount('#app')
+
+        
     </script>
 </body>
 </html>
