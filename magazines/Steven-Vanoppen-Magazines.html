@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Magazines</title>
+</head>
+<body>
+    <div id="app">
+        <h1 v-html="titel"></h1>
+        <div v-for="magazine in magazines">
+            
+            <h2>{{ magazine.naam }}</h2>
+            <div v-if="!magazine.doelgroep">
+                <p>Het doelgroep ontbreekt!</p>
+            </div>
+            <div v-else>
+                <p>Doelgroep: {{ magazine.doelgroep }}</p>
+            </div>
+            <div v-if="!magazine.prijs">
+                <p>De kostprijs ontbreekt</p>
+            </div>
+            <div v-else>
+                <p>Kostprijs los nummer: {{ magazine.prijs }}</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const app = {
+            data: function () {
+                return {
+                    titel: "<i>Magazines</i>",
+                    magazines: [
+                        {naam: "Libelle", doelgroep: "vrouwen", prijs: 4.75},
+                        {naam: "Knack", doelgroep: "", prijs: 6.25},
+                        {naam:"Humo", doelgroep: "gemengd", prijs: ""}
+                    ]
+                }
+            }
+        }
+        Vue.createApp(app).mount('#app')
+    </script>
+</body>
+</html>
