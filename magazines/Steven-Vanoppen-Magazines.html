@@ -11,21 +11,31 @@
     <div id="app">
         <h1 v-html="titel"></h1>
         <div v-for="magazine in magazines">
-            
-            <h2>{{ magazine.naam }}</h2>
-            <div v-if="!magazine.doelgroep">
+            <div v-bind:class="[ !magazine.doelgroep || !magazine.prijs ? 'red' : 'green']">
+                <h2>{{ magazine.naam }}</h2>
+            </div>
+            <div v-if="!magazine.doelgroep" class="red">
                 <p>Het doelgroep ontbreekt!</p>
             </div>
             <div v-else>
                 <p>Doelgroep: {{ magazine.doelgroep }}</p>
             </div>
-            <div v-if="!magazine.prijs">
+            <div v-if="!magazine.prijs" class="red">
                 <p>De kostprijs ontbreekt</p>
             </div>
             <div v-else>
                 <p>Kostprijs los nummer: {{ magazine.prijs }}</p>
             </div>
         </div>
+        <form method="post">    
+            <label for="naam">Naam:</label>
+            <input type="text" name="naam" id="naam">
+            <label for="doelgroep">Doelgroep:</label>
+            <input type="text" name="doelgroep" id="doelgroep">
+            <label for="prijs">Prijs:</label>
+            <input type="text" name="prijs" id="prijs">
+            <input type="submit" value="Voeg toe" v-on:click="voegMagazineToe()">
+        </form>
     </div>
 
 
@@ -39,6 +49,12 @@
                         {naam: "Knack", doelgroep: "", prijs: 6.25},
                         {naam:"Humo", doelgroep: "gemengd", prijs: ""}
                     ]
+                }
+            }, 
+
+            methods: {
+                voegMagazineToe: function () {
+                    
                 }
             }
         }
