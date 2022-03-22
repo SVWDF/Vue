@@ -41,9 +41,12 @@
                     <button id="verstuur" v-on:click="nieuwsbriefControle()">Verstuur</button>
                 </p>
             </form>
-            <span class="error" v-if="errors.length">
-                <p v-for="error in errors">{{ error }}</p>
-            </span>
+            <div>
+                <span class="error" v-if="errors.length">
+                    <p v-for="error in errors">{{ error }}</p>
+                </span>
+                <span class="complete" v-model="noErrors">{{ noErrors }}</span>
+            </div>
         </div>
     </div>
     <script>
@@ -51,13 +54,15 @@
             data: function () {
                 return {
                     checkedNieuwsbrieven: [],
-                    errors: []
+                    errors: [],
+                    noErrors: ''
                 }
             },
 
             methods: {
                 nieuwsbriefControle: function () {
 
+                    this.noErrors = '';
                     this.errors = [];
 
                     if (!this.voornaam) {
@@ -81,7 +86,7 @@
                     }
 
                     if (!this.errors.length) {
-
+                        this.noErrors = 'Uw aanmelding is verstuurd';
                     }
 
                     event.preventDefault();
