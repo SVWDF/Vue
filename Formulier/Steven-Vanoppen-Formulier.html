@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Formulier</title>
+</head>
+<body>
+    <div id="app">
+        <div id="form" v-popup>
+            <h1>Nieuwsbrief</h1>
+            <form>
+                <p>
+                    <label for="voornaam">Voornaam</label>
+                    <input type="text" name="voornaam" id="voornaam" v-model="voornaam">
+                </p>
+                <p>
+                    <label for="achternaam">Achternaam</label>
+                    <input type="text" name="achternaam" id="achternaam" v-model="achternaam">
+                </p>
+                <p>
+                    <label for="email">Emailadres</label>
+                    <input type="email" name="email" id="email" v-model="email">
+                </p>
+                <p>Ik abonneer mij op de volgende nieuwsbrieven:</p>
+                <p>
+                    <input type="checkbox" name="mobiele-technology" id="mobiele-technology" value="Mobiele-Technology" v-model="checkedNieuwsbrieven">
+                    <label for="mobiele-technology">Mobiele technology</label><br>
+                    <input type="checkbox" name="ps-games" id="ps-games" value="PS-Games" v-model="checkedNieuwsbrieven">
+                    <label for="ps-games">PS Games</label><br>
+                    <input type="checkbox" name="webdesign" id="webdesign" value="Webdesign" v-model="checkedNieuwsbrieven">
+                    <label for="webdesign">Webdesign</label>
+                </p>
+                <p>
+                    <input type="checkbox" name="gegevens" id="gegevens" v-model="gegevens">
+                    <label for="gegevens">Ik ga akkoord met het gebruik van mijn gegevens voor de registratie van mijn account</label>
+                </p>
+                <p>
+                    <button id="verstuur" v-on:click="nieuwsbriefControle()">Verstuur</button>
+                </p>
+            </form>
+            <span class="error" v-if="errors.length">
+                <p v-for="error in errors">{{ error }}</p>
+            </span>
+        </div>
+    </div>
+    <script>
+        const app = Vue.createApp({
+            data: function () {
+                return {
+                    checkedNieuwsbrieven: [],
+                    errors: []
+                }
+            },
+
+            methods: {
+                nieuwsbriefControle: function () {
+
+                    this.errors = [];
+
+                    if (!this.voornaam) {
+                        this.errors.push('Geef de voornaam in AUB');
+                    }
+
+                    if (!this.achternaam) {
+                        this.errors.push('Geef de achternaam in AUB');
+                    }
+
+                    if (!this.email) {
+                        this.errors.push('Geef het emailadres in AUB');
+                    }
+
+                    if (this.checkedNieuwsbrieven.length === 0) {
+                        this.errors.push('Geef minstens 1 keuze op AUB');
+                    }
+
+                    if (!this.gegevens) {
+                        this.errors.push('Ga akkoord met de GDPR voorwaarde om het formulier te kunnen versturen');
+                    }
+
+                    if (!this.errors.length) {
+
+                    }
+
+                    event.preventDefault();
+                }
+            }
+        })
+
+        app.directive('popup', {
+            mounted: function (el) {
+                el.style.display = 'block'
+            }
+        })
+        app.mount('#app')
+    </script>
+</body>
+</html>

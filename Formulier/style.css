@@ -1,0 +1,11 @@
+#form {
+    display: none;
+}
+
+.error {
+    color: red;
+}
+
+.complete {
+    color: green;
+}
