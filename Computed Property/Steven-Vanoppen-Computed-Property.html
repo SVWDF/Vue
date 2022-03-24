@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Computed Properties</title>
+</head>
+<body>
+    <div id="app">
+        <h1>Resultaat</h1>
+        <div v-for="(cursist, index) in cursisten">
+            <h2>Naam: {{ cursist.naam }}</h2>
+            <h3>Geslaagd</h3>
+            <div v-for="(vak, indexvak) in cursist.resultaten">
+                <p>
+                    {{ beoordelingVakken[index][indexvak] }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        const app = {
+            data: function () {
+                return {
+                    cursisten: [
+                        {
+                            naam: 'Jan',
+                            resultaten: [
+                                ['html', 40],
+                                ['JS', 80],
+                                ['JS-OOP', 70]
+                            ]
+                        },
+                        {
+                            naam: 'Piet',
+                            resultaten: [
+                                ['html', 90], 
+                                ['JS', 90],
+                                ['JS-OOP', 20]
+                            ]
+                        }
+                    ]
+                }         
+            },
+            
+            computed: {
+                beoordelingVakken: function () {
+                    return this.cursisten.map(cursist => {
+                        return cursist.resultaten.map(vakresultaat => {
+                            return vakresultaat[0];
+                        })
+                    })
+                }
+            }
+        }
+        Vue.createApp(app).mount('#app')
+    </script>
+</body>
+</html>
