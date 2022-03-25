@@ -13,8 +13,14 @@
             <h2>Naam: {{ cursist.naam }}</h2>
             <h3>Geslaagd</h3>
             <div v-for="(vak, indexvak) in cursist.resultaten">
-                <p>
-                    {{ beoordelingVakken[index][indexvak] }}
+                <p v-if="beoordelingVakken[index][indexvak] == 1">
+                    {{ vak[0] + ': ' + vak[1] }}
+                </p>
+            </div>
+            <h3>Onvoldoende</h3>
+            <div v-for="(vak, indexvak) in cursist.resultaten">
+                <p v-if="beoordelingVakken[index][indexvak] == 0">
+                    {{ vak[0] + ': ' + vak[1] }}
                 </p>
             </div>
         </div>
@@ -48,7 +54,12 @@
                 beoordelingVakken: function () {
                     return this.cursisten.map(cursist => {
                         return cursist.resultaten.map(vakresultaat => {
-                            return vakresultaat[0];
+                            if (vakresultaat[1] > 50) {
+                                return 1
+                            }
+                            else if (vakresultaat[1] < 50) {
+                                return 0
+                            }
                         })
                     })
                 }
