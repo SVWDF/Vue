@@ -102,17 +102,17 @@
             <h1>{{ titel }}</h1>
             <h5>{{ subtitel }}</h5>
         </header>
-        <section id="cookies">
+        <section v-if="showCookieMelding == null" id="cookies">
             <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
                 deze cookies.</p>
-            <input type="checkbox">Deze melding niet meer tonen.
+            <input v-on:change="check()" type="checkbox">Deze melding niet meer tonen.
         </section>
         <section id="inhoud">
             <h4>Nieuwe items</h4>
             <section id="nieuwe-items">
                 <div class='item' v-for="item in items">
                     <div class='item-img'>
-                        <img v-on:click="toonGroteFoto()" :src="'images/small/' + item.afbeelding_src">
+                        <img v-on:click="toonGroteFoto(item)" :src="item.pathSmall + item.afbeelding_src">
                     </div>
                     <div class='item-body'>
                         <div class='prijs'>{{ item.prijs }}€</div>
@@ -131,19 +131,24 @@
                     titel: 'Superhero store',
                     subtitel: 'Your break from the office life!',
                     items: [
-                        {id: 0, naam: 'Superman Hondenpak', omschrijving: 'Neem je hond mee als sidekick op al je avonturen!', prijs: 29.99, afbeelding_src: 'elias-castillo-7-ToFEHzMNw-unsplash.jpg'},
-                        {id: 1, naam: 'Wonder Woman', omschrijving: 'Laat de kleine meid tonen hoe speciaal ze is!', prijs: 34.99, afbeelding_src: 'gabriela-braga-CVEWeDNsJP4-unsplash.jpg'},
-                        {id: 2, naam: 'Spiderman masker', omschrijving: 'Je wil niet altijd dat je herkent wordt voor je goede daden!', prijs: 14.99, afbeelding_src: 'joey-nicotra-0EI_4R2r0qg-unsplash.jpg'}
-                    ]
+                        {id: 0, naam: 'Superman Hondenpak', omschrijving: 'Neem je hond mee als sidekick op al je avonturen!', prijs: 29.99, afbeelding_src: 'elias-castillo-7-ToFEHzMNw-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/'},
+                        {id: 1, naam: 'Wonder Woman', omschrijving: 'Laat de kleine meid tonen hoe speciaal ze is!', prijs: 34.99, afbeelding_src: 'gabriela-braga-CVEWeDNsJP4-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/'},
+                        {id: 2, naam: 'Spiderman masker', omschrijving: 'Je wil niet altijd dat je herkent wordt voor je goede daden!', prijs: 14.99, afbeelding_src: 'joey-nicotra-0EI_4R2r0qg-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/'}
+                    ],
+                    showCookieMelding: localStorage.getItem('showCookieMelding'),
                 }
             },
 
             methods: {
-                toonGroteFoto: function () {
-                    let src = this.items.afbeelding_src;
-                    console.log(src);
-                    // window.open('_blank');
-                    // window.open(routeData.href, '_blank');
+                toonGroteFoto: function (item) {
+                    let grotePath = item.pathBig;
+                    let foto = item.afbeelding_src;
+                    window.open(grotePath + foto,'_blank');
+                },
+
+                check: function () {
+                    this.showCookieMelding = false;
+                    localStorage.showCookieMelding = this.showCookieMelding;
                 }
             }
         }
