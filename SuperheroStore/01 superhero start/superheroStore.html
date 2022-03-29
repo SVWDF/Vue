@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SuperheroStore</title>
+    <meta charset="utf-8">
+    <script src="https://unpkg.com/vue@next"></script>
+    <style type="text/css">
+        body,
+        html {
+            font-family: verdana, sans-serif;
+            color: #666;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+
+        header {
+            background: #770000;
+            padding: 20px 60px;
+            margin: 0;
+            color: #ffeedd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #cookies,
+        #inhoud {
+            padding: 20px 30px;
+        }
+
+        a {
+            color: #ffeedd;
+        }
+
+        #cookies {
+            background-color: orange
+        }
+
+        #nieuwe-items {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .item {
+            border: 2px solid #ccc;
+            width: 300px;
+            background-color: #fff;
+            text-align: center;
+            height: 550px
+        }
+
+        .besteld {
+            position: relative;
+            top: -250px;
+            color: white;
+            font-size: 29px;
+            background: green
+        }
+
+        .item-img {
+            width: 300px;
+            height: 300px;
+            background-color: #ddd;
+        }
+
+        .item-img img {
+            cursor: pointer;
+        }
+
+        .item-body {
+            padding: 25px;
+            color: #789;
+        }
+
+        .item-body h4 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .item-body .prijs {
+            font-size: 2em;
+            color: #009900;
+            margin-bottom: 25px;
+        }
+
+        .knop {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #009900;
+            color: #ffffff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            letter-spacing: 1px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header">
+            <h1>{{ titel }}</h1>
+            <h5>{{ subtitel }}</h5>
+        </header>
+        <section id="cookies">
+            <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
+                deze cookies.</p>
+            <input type="checkbox">Deze melding niet meer tonen.
+        </section>
+        <section id="inhoud">
+            <h4>Nieuwe items</h4>
+            <section id="nieuwe-items">
+                <div class='item' v-for="item in items">
+                    <div class='item-img'>
+                        <img :src="'images/small/' + item.afbeelding_src">
+                    </div>
+                    <div class='item-body'>
+                        <div class='prijs'>{{ item.prijs }}€</div>
+                        <h4>{{ item.naam }}</h4>
+                        <p>{{ item.omschrijving }}</p>
+                        <a href='#' class='knop'>BESTEL</a>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
+    <script type="text/javascript">
+        const app = {
+            data: function () {
+                return {
+                    titel: 'Superhero store',
+                    subtitel: 'Your break from the office life!',
+                    items: [
+                        {id: 0, naam: 'Superman Hondenpak', omschrijving: 'Neem je hond mee als sidekick op al je avonturen!', prijs: 29.99, afbeelding_src: 'elias-castillo-7-ToFEHzMNw-unsplash.jpg'},
+                        {id: 1, naam: 'Wonder Woman', omschrijving: 'Laat de kleine meid tonen hoe speciaal ze is!', prijs: 34.99, afbeelding_src: 'gabriela-braga-CVEWeDNsJP4-unsplash.jpg'},
+                        {id: 2, naam: 'Spiderman masker', omschrijving: 'Je wil niet altijd dat je herkent wordt voor je goede daden!', prijs: 14.99, afbeelding_src: 'joey-nicotra-0EI_4R2r0qg-unsplash.jpg'}
+                    ]
+                }
+            }
+        }
+        Vue.createApp(app).mount('#app')
+    </script>
+</body>
+
+</html>

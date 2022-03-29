@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        body,
+        html {
+            font-family: verdana, sans-serif;
+            color: #666;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+
+        header {
+            background: #770000;
+            padding: 20px 60px;
+            margin: 0;
+            color: #ffeedd;
+            border-bottom: 1px solid #ddd;
+        }
+
+
+        h1 a {
+            text-decoration: none;
+            color: #ffeedd;
+        }
+
+        #cookies,
+        #inhoud {
+            padding: 20px 30px;
+        }
+
+        #cookies {
+            background-color: orange
+        }
+
+        #nieuwe-items {
+            display: flex-row;
+            justify-content: space-between;
+        }
+
+        .item {
+            border: 2px solid #ccc;
+            width: 800px;
+            background-color: #fff;
+            text-align: right;
+            margin-bottom: 50px;
+        }
+
+        .item-img {
+            width: 100px;
+            height: 100px;
+            background-color: #ddd;
+        }
+
+        .item-img img {
+            cursor: pointer;
+        }
+
+        .item-body {
+            padding: 25px;
+            color: #789;
+        }
+
+        .item-body h4 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .item-body .prijs,
+        input,
+        .totaal {
+            font-size: 2em;
+            color: #009900;
+            margin-bottom: 25px;
+        }
+
+        .knop {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #009900;
+            color: #ffffff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            letter-spacing: 1px;
+        }
+
+        #winkelwagen {
+            text-align: right;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header">
+            <h1></h1>
+            <h5></h5>
+            <p id="winkelwagen">Items in winkelwagen:</p>
+        </header>
+        <section id="cookies">
+            <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
+                deze cookies.</p>
+            <input type="checkbox">Deze melding niet meer tonen.
+        </section>
+        <section id="inhoud">
+            <h4>Gekozen items</h4>
+            <section id="nieuwe-items">
+                <div>
+                    <div class="item">
+                        <div class="item-img"><img>
+                        </div>
+                        <div class="item-body">
+                            <div class="prijs">€</div>
+                            <h4></h4>
+                            <p></p>
+                            <input type="number" size="2">
+                            <a href="#" class="knop">verwijder</a>
+                        </div>
+
+                    </div>
+                    <div>
+                        <p class="totaal">Totaal: </p>
+                    </div>
+                </div>
+                <div>
+                    <p>Geen items</p>
+                </div>
+            </section>
+        </section>
+    </div>
+    <script type="text/javascript">
+        const app = {
+            data: function () {
+                return {
+
+                }
+            },
+            methods: {
+                toonGroteFoto: ,
+                check: ,
+                verwijder: ,
+                aantalAanpassing: ,
+                saveLocalStorageWinkelwagen: 
+            },
+            computed: {
+                totalePrijs: function () {
+
+                },
+                totaalAantalItems: function () {
+
+                }
+            },
+            mounted() {
+
+            }
+        }
+
+        Vue.createApp(app).mount('#app')
+    </script>
+</body>
+
+</html>
