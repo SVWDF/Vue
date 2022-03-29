@@ -92,6 +92,18 @@
             font-size: 0.75em;
             letter-spacing: 1px;
         }
+
+        #bestel_items {
+            background-color: #009900;
+            width: 230px;
+            height: 40px;
+            color: white;
+            font-size: 28px;
+            position: relative;
+            left: 50%;
+            margin-top: -50px;
+            transform: translate(-50%);
+        }
     </style>
 
 </head>
@@ -114,11 +126,14 @@
                     <div class='item-img'>
                         <img v-on:click="toonGroteFoto(item)" :src="item.pathSmall + item.afbeelding_src">
                     </div>
+                    <div v-if="item.besteld > 0" id="bestel_items">
+                        <p>Besteld: {{ item.besteld }}</p>
+                    </div>
                     <div class='item-body'>
                         <div class='prijs'>{{ item.prijs }}€</div>
                         <h4>{{ item.naam }}</h4>
                         <p>{{ item.omschrijving }}</p>
-                        <a href='#' class='knop'>BESTEL</a>
+                        <a href='#' v-on:click.prevent="VoegToeAanWinkelwagen(item)" class='knop'>BESTEL</a>
                     </div>
                 </div>
             </section>
@@ -131,11 +146,12 @@
                     titel: 'Superhero store',
                     subtitel: 'Your break from the office life!',
                     items: [
-                        {id: 0, naam: 'Superman Hondenpak', omschrijving: 'Neem je hond mee als sidekick op al je avonturen!', prijs: 29.99, afbeelding_src: 'elias-castillo-7-ToFEHzMNw-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/'},
-                        {id: 1, naam: 'Wonder Woman', omschrijving: 'Laat de kleine meid tonen hoe speciaal ze is!', prijs: 34.99, afbeelding_src: 'gabriela-braga-CVEWeDNsJP4-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/'},
-                        {id: 2, naam: 'Spiderman masker', omschrijving: 'Je wil niet altijd dat je herkent wordt voor je goede daden!', prijs: 14.99, afbeelding_src: 'joey-nicotra-0EI_4R2r0qg-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/'}
+                        {id: 0, naam: 'Superman Hondenpak', omschrijving: 'Neem je hond mee als sidekick op al je avonturen!', prijs: 29.99, afbeelding_src: 'elias-castillo-7-ToFEHzMNw-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/', besteld: 0},
+                        {id: 1, naam: 'Wonder Woman', omschrijving: 'Laat de kleine meid tonen hoe speciaal ze is!', prijs: 34.99, afbeelding_src: 'gabriela-braga-CVEWeDNsJP4-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/', besteld: 0},
+                        {id: 2, naam: 'Spiderman masker', omschrijving: 'Je wil niet altijd dat je herkent wordt voor je goede daden!', prijs: 14.99, afbeelding_src: 'joey-nicotra-0EI_4R2r0qg-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/', besteld: 0}
                     ],
                     showCookieMelding: localStorage.getItem('showCookieMelding'),
+                    winkelwagen: []
                 }
             },
 
@@ -149,6 +165,10 @@
                 check: function () {
                     this.showCookieMelding = false;
                     localStorage.showCookieMelding = this.showCookieMelding;
+                },
+
+                VoegToeAanWinkelwagen: function (item) {
+                    item.besteld += 1;
                 }
             }
         }
