@@ -180,7 +180,7 @@
                 },
 
                 VoegToeAanWinkelwagen: function (item) {
-                    item.besteld += 1;
+                    parseInt(item.besteld += 1);
                     this.saveLocalStorageWinkelwagen();
                     this.aantalInWinkelwagen++
                 }

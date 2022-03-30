@@ -101,34 +101,33 @@
         <header id="main-header">
             <h1><a href="superheroStore.html">{{ titel }}</a></h1>
             <h5>{{ subtitel }}</h5>
-            <p id="winkelwagen">Items in winkelwagen:</p>
+            <p id="winkelwagen">Items in winkelwagen: {{ totaalAantalItems }}</p>
         </header>
-        <section id="cookies">
+        <section v-if="showCookieMelding == null" id="cookies">
             <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
                 deze cookies.</p>
-            <input type="checkbox">Deze melding niet meer tonen.
+            <input v-on:change="check()" type="checkbox">Deze melding niet meer tonen.
         </section>
         <section id="inhoud">
             <h4>Gekozen items</h4>
             <section id="nieuwe-items">
-                <div>
-                    <div class="item">
-                        <div class="item-img"><img>
+                <div v-if="totaalAantalItems > 0">
+                    <div class="item" v-for="(item, index) in items">
+                        <div class="item-img"><img v-on:click="toonGroteFoto(item)" :src="pathSmall + item.afbeelding_src">
                         </div>
                         <div class="item-body">
-                            <div class="prijs">€</div>
-                            <h4></h4>
-                            <p></p>
-                            <input type="number" size="2">
-                            <a href="#" class="knop">verwijder</a>
+                            <div class="prijs">{{ item.prijs }}€</div>
+                            <h4>{{ item.naam }}</h4>
+                            <p>{{ item.omschrijving }}</p>
+                            <input type="number" size="2" :value="item.besteld" v-model="item.besteld" v-on:change="aantalAanpassing(index)">
+                            <a href="#" v-on:click="verwijder(index)" class="knop">verwijder</a>
                         </div>
-
                     </div>
                     <div>
-                        <p class="totaal">Totaal: </p>
+                        <p class="totaal">Totaal: {{ totalePrijs }}€</p>
                     </div>
                 </div>
-                <div>
+                <div v-if="totaalAantalItems == 0">
                     <p>Geen items</p>
                 </div>
             </section>
@@ -142,39 +141,63 @@
                     subtitel: 'Your break from the office life',
                     pathSmall: 'images/small/',
                     pathBig: 'images/big/',
-                    showCookieMelding: true,
+                    showCookieMelding: localStorage.getItem('showCookieMelding'),
                     items: []
                 }
             },
             methods: {
-                toonGroteFoto: function () {
+                toonGroteFoto: function (item) {
+                    let foto = item.afbeelding_src;
+                    window.open(this.pathBig + foto,'_blank');
                 },
 
                 check: function () {
-
+                    this.showCookieMelding = false;
+                    localStorage.showCookieMelding = this.showCookieMelding;
                 },
 
-                verwijder: function () {
-
+                verwijder: function (index) {
+                    this.items.splice(index, 1);
+                    this.saveLocalStorageWinkelwagen();
                 },
 
-                aantalAanpassing: function () {
-
+                aantalAanpassing: function (index) {
+                    this.items[index].besteld = parseInt(event.target.value);
+                    this.saveLocalStorageWinkelwagen();
                 },
 
                 saveLocalStorageWinkelwagen: function () {
-
+                    localStorage.setItem('winkelwagen', JSON.stringify(this.items));
                 } 
             },
             computed: {
                 totalePrijs: function () {
-
+                    let totaal = 0;
+                    this.items.forEach(prijzen => {
+                        if (prijzen.besteld > 0) {
+                            totaal += (prijzen.prijs * prijzen.besteld);
+                        }
+                    });
+                    return totaal.toFixed(2);
                 },
                 totaalAantalItems: function () {
-
+                    let totaal = 0;
+                    this.items.forEach(items => {
+                        if (items.besteld > 0) {
+                            totaal += items.besteld;
+                        }
+                    });
+                    return totaal;
                 }
             },
             mounted() {
+                if (localStorage.getItem('winkelwagen')) {
+                    this.items = JSON.parse(localStorage.getItem('winkelwagen'));
+                }
+
+                if (localStorage.getItem('showCookiemelding')) {
+                    this.showCookieMelding = localStorage.getItem('showCookieMelding');
+                }
 
             }
         }
