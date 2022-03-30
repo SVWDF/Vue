@@ -2,8 +2,9 @@
 <html>
 
 <head>
-    <title></title>
+    <title>Winkelwagen</title>
     <meta charset="utf-8">
+    <script src="https://unpkg.com/vue@next"></script>
     <style type="text/css">
         body,
         html {
@@ -92,14 +93,14 @@
             text-align: right;
         }
     </style>
-    <script src="https://unpkg.com/vue@next"></script>
+
 </head>
 
 <body>
     <div id="app">
         <header id="main-header">
-            <h1></h1>
-            <h5></h5>
+            <h1><a href="superheroStore.html">{{ titel }}</a></h1>
+            <h5>{{ subtitel }}</h5>
             <p id="winkelwagen">Items in winkelwagen:</p>
         </header>
         <section id="cookies">
@@ -137,15 +138,33 @@
         const app = {
             data: function () {
                 return {
-
+                    titel: 'Superhero store',
+                    subtitel: 'Your break from the office life',
+                    pathSmall: 'images/small/',
+                    pathBig: 'images/big/',
+                    showCookieMelding: true,
+                    items: []
                 }
             },
             methods: {
-                toonGroteFoto: ,
-                check: ,
-                verwijder: ,
-                aantalAanpassing: ,
-                saveLocalStorageWinkelwagen: 
+                toonGroteFoto: function () {
+                },
+
+                check: function () {
+
+                },
+
+                verwijder: function () {
+
+                },
+
+                aantalAanpassing: function () {
+
+                },
+
+                saveLocalStorageWinkelwagen: function () {
+
+                } 
             },
             computed: {
                 totalePrijs: function () {
