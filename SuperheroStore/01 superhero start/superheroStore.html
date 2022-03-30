@@ -104,6 +104,10 @@
             margin-top: -50px;
             transform: translate(-50%);
         }
+
+        #aantal_items {
+            text-align: right;
+        }
     </style>
 
 </head>
@@ -113,6 +117,7 @@
         <header id="main-header">
             <h1>{{ titel }}</h1>
             <h5>{{ subtitel }}</h5>
+            <p v-if="aantalInWinkelwagen > 0" id="aantal_items">Items in winkelwagen: {{ aantalInWinkelwagen }}</p>
         </header>
         <section v-if="showCookieMelding == null" id="cookies">
             <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
@@ -124,7 +129,7 @@
             <section id="nieuwe-items">
                 <div class='item' v-for="item in items">
                     <div class='item-img'>
-                        <img v-on:click="toonGroteFoto(item)" :src="item.pathSmall + item.afbeelding_src">
+                        <img v-on:click="toonGroteFoto(item)" :src="pathSmall + item.afbeelding_src">
                     </div>
                     <div v-if="item.besteld > 0" id="bestel_items">
                         <p>Besteld: {{ item.besteld }}</p>
@@ -146,20 +151,22 @@
                     titel: 'Superhero store',
                     subtitel: 'Your break from the office life!',
                     items: [
-                        {id: 0, naam: 'Superman Hondenpak', omschrijving: 'Neem je hond mee als sidekick op al je avonturen!', prijs: 29.99, afbeelding_src: 'elias-castillo-7-ToFEHzMNw-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/', besteld: 0},
-                        {id: 1, naam: 'Wonder Woman', omschrijving: 'Laat de kleine meid tonen hoe speciaal ze is!', prijs: 34.99, afbeelding_src: 'gabriela-braga-CVEWeDNsJP4-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/', besteld: 0},
-                        {id: 2, naam: 'Spiderman masker', omschrijving: 'Je wil niet altijd dat je herkent wordt voor je goede daden!', prijs: 14.99, afbeelding_src: 'joey-nicotra-0EI_4R2r0qg-unsplash.jpg', pathSmall: 'images/small/', pathBig: 'images/big/', besteld: 0}
+                        {id: 0, naam: 'Superman Hondenpak', omschrijving: 'Neem je hond mee als sidekick op al je avonturen!', prijs: 29.99, afbeelding_src: 'elias-castillo-7-ToFEHzMNw-unsplash.jpg', besteld: 0},
+                        {id: 1, naam: 'Wonder Woman', omschrijving: 'Laat de kleine meid tonen hoe speciaal ze is!', prijs: 34.99, afbeelding_src: 'gabriela-braga-CVEWeDNsJP4-unsplash.jpg', besteld: 0},
+                        {id: 2, naam: 'Spiderman masker', omschrijving: 'Je wil niet altijd dat je herkent wordt voor je goede daden!', prijs: 14.99, afbeelding_src: 'joey-nicotra-0EI_4R2r0qg-unsplash.jpg', besteld: 0}
                     ],
+                    pathSmall: 'images/small/',
+                    pathBig: 'images/big/',
                     showCookieMelding: localStorage.getItem('showCookieMelding'),
-                    winkelwagen: []
+                    winkelwagen: [],
+                    aantalInWinkelwagen: 0
                 }
             },
 
             methods: {
                 toonGroteFoto: function (item) {
-                    let grotePath = item.pathBig;
                     let foto = item.afbeelding_src;
-                    window.open(grotePath + foto,'_blank');
+                    window.open(this.pathBig + foto,'_blank');
                 },
 
                 check: function () {
@@ -167,8 +174,29 @@
                     localStorage.showCookieMelding = this.showCookieMelding;
                 },
 
+                saveLocalStorageWinkelwagen: function () {
+                    let temp = this.items.filter((item) => item.besteld !== 0);
+                    localStorage.winkelwagen = JSON.stringify(temp);
+                },
+
                 VoegToeAanWinkelwagen: function (item) {
                     item.besteld += 1;
+                    this.saveLocalStorageWinkelwagen();
+                    this.aantalInWinkelwagen++
+                }
+            },
+
+            mounted() {
+                if (localStorage.getItem('winkelwagen')) {
+                    let tempLs = JSON.parse(localStorage.getItem('winkelwagen'));
+                    tempLs.forEach((ItemInLs) => {
+                        let gevondenItemData = this.items.find(itemInData => itemInData.id == ItemInLs.id);
+
+                        if (gevondenItemData) {
+                            gevondenItemData.besteld = ItemInLs.besteld;
+                            this.aantalInWinkelwagen += (ItemInLs.besteld);
+                        }
+                    })
                 }
             }
         }
