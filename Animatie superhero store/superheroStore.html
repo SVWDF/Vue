@@ -151,10 +151,10 @@
                         <h4>{{item.naam}}</h4>
                         <p>{{item.omschrijving}}</p>
                         <transition name="bestel" appear>
-                            <a href="#" class="knop" v-on:click.prevent="VoegToeAanWinkelwagen(index)">BESTEL</a>
+                            <a href="#" class="knop" v-on:click.prevent="VoegToeAanWinkelwagen(index); animatieBestelAantal();">BESTEL</a>
                         </transition>
                         <transition name="bestel">
-                            <p class="besteld" v-if="item.besteld>0">Besteld: {{item.besteld}}</p>
+                            <p class="besteld" v-if="item.besteld > 0 && animatieBestelAantalShow" v-bind:key="item.besteld">Besteld: {{item.besteld}}</p>
                         </transition>
                     </div>
                 </div>
@@ -196,7 +196,8 @@
                     }
                 ],
                 winkelwagen: [],
-                aantalInWinkelwagen: 0
+                aantalInWinkelwagen: 0,
+                animatieBestelAantalShow: true
             }
         },
         methods: {
@@ -215,6 +216,11 @@
                 this.items[index].besteld++;
                 this.aantalInWinkelwagen++;
                 this.saveLocalStorageWinkelwagen();
+            },
+
+            animatieBestelAantal: function() {
+                this.animatieBestelAantalShow = false;
+                this.animatieBestelAantalShow = true;
             }
         },
 
