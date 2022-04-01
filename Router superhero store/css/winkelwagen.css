@@ -1,0 +1,86 @@
+body,
+    html {
+        font-family: verdana, sans-serif;
+        color: #666;
+        background-color: #f9f9f9;
+        margin: 0;
+    }
+
+    header {
+        background: #770000;
+        padding: 20px 60px;
+        margin: 0;
+        color: #ffeedd;
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    h1 a {
+        text-decoration: none;
+        color: #ffeedd;
+    }
+
+    #cookies,
+    #inhoud {
+        padding: 20px 30px;
+    }
+
+    #cookies {
+        background-color: orange
+    }
+
+    #nieuwe-items {
+        display: flex-row;
+        justify-content: space-between;
+    }
+
+    .item {
+        border: 2px solid #ccc;
+        width: 800px;
+        background-color: #fff;
+        text-align: right;
+        margin-bottom: 50px;
+    }
+
+    .item-img {
+        width: 100px;
+        height: 100px;
+        background-color: #ddd;
+    }
+
+    .item-img img {
+        cursor: pointer;
+    }
+
+    .item-body {
+        padding: 25px;
+        color: #789;
+    }
+
+    .item-body h4 {
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .item-body .prijs,
+    input,
+    .totaal {
+        font-size: 2em;
+        color: #009900;
+        margin-bottom: 25px;
+    }
+
+    .knop {
+        display: inline-block;
+        text-decoration: none;
+        background-color: #009900;
+        color: #ffffff;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 0.75em;
+        letter-spacing: 1px;
+    }
+
+    #winkelwagen {
+        text-align: right;
+    }

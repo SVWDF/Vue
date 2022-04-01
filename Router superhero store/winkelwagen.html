@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style type="text/css">
+    body,
+    html {
+        font-family: verdana, sans-serif;
+        color: #666;
+        background-color: #f9f9f9;
+        margin: 0;
+    }
+
+    header {
+        background: #770000;
+        padding: 20px 60px;
+        margin: 0;
+        color: #ffeedd;
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    h1 a {
+        text-decoration: none;
+        color: #ffeedd;
+    }
+
+    #cookies,
+    #inhoud {
+        padding: 20px 30px;
+    }
+
+    #cookies {
+        background-color: orange
+    }
+
+    #nieuwe-items {
+        display: flex-row;
+        justify-content: space-between;
+    }
+
+    .item {
+        border: 2px solid #ccc;
+        width: 800px;
+        background-color: #fff;
+        text-align: right;
+        margin-bottom: 50px;
+    }
+
+    .item-img {
+        width: 100px;
+        height: 100px;
+        background-color: #ddd;
+    }
+
+    .item-img img {
+        cursor: pointer;
+    }
+
+    .item-body {
+        padding: 25px;
+        color: #789;
+    }
+
+    .item-body h4 {
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .item-body .prijs,
+    input,
+    .totaal {
+        font-size: 2em;
+        color: #009900;
+        margin-bottom: 25px;
+    }
+
+    .knop {
+        display: inline-block;
+        text-decoration: none;
+        background-color: #009900;
+        color: #ffffff;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 0.75em;
+        letter-spacing: 1px;
+    }
+
+    #winkelwagen {
+        text-align: right;
+    }
+    </style>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header">
+            <h1><a href="superheroStore.html">{{titel}}</a></h1>
+            <h5>{{subtitel}}</h5>
+            <p id="winkelwagen">Items in winkelwagen: {{totaalAantalItems}}</p>
+        </header>
+        <section id="cookies" v-if="showCookieMelding">
+            <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
+                deze cookies.</p>
+            <label><input type="checkbox" v-on:change="check()">Deze melding niet meer tonen.</label>
+        </section>
+        <section id="inhoud">
+            <h4>Gekozen items</h4>
+            <section id="nieuwe-items">
+                <div v-if="items.length > 0">
+                    <div class="item" v-for='(item,index) in items' :key='item.id'>
+                        <div class="item-img">
+                            <img v-bind:src="pathSmall +item.src" v-on:click="toonGroteFoto(item.src)">
+                        </div>
+                        <div class="item-body">
+                            <div class="prijs">{{(parseFloat(item.prijs) * parseFloat(item.besteld)).toFixed(2)}}€</div>
+                            <h4>{{item.naam}}</h4>
+                            <p>{{item.omschrijving}}</p>
+                            <input type="number" v-model="item.besteld" size="2" v-on:change="aantalAanpassing(index)">
+                            <a href="#" class="knop" v-on:click="verwijder(index)">verwijder</a>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="totaal">Totaal: {{totalePrijs.toFixed(2)}}</p>
+                    </div>
+                </div>
+                <div v-else>
+                    <p>Geen items</p>
+                </div>
+            </section>
+        </section>
+    </div>
+    <script type="text/javascript">
+    const app = {
+        data: function() {
+            return {
+                titel: "Superhero store",
+                subtitel: "Your break from the office life!",
+                pathSmall: "images/small/",
+                pathBig: "images/big/",
+                showCookieMelding: false,
+                items: []
+            }
+        },
+        methods: {
+            toonGroteFoto: function(src) {
+                window.open(this.pathBig + src);
+            },
+            check: function() {
+                this.showCookieMelding = false;
+                localStorage.setItem("showCookieMelding", false);
+            },
+            verwijder: function(index) {
+                this.items.splice(index, 1);
+                this.saveLocalStorageWinkelwagen();
+            },
+            aantalAanpassing: function(index) {
+                if (this.items[index].besteld == 0) {
+                    this.items.splice(index, 1);
+                }
+                this.saveLocalStorageWinkelwagen()
+            },
+            saveLocalStorageWinkelwagen: function() {
+                localStorage.setItem("winkelwagen", JSON.stringify(this.items));
+            }
+        },
+        computed: {
+            totalePrijs: function() {
+                let totaal = 0;
+                this.items.forEach(item => {
+                    if (item.besteld > 0) {
+                        totaal += item.besteld * item.prijs
+                    }
+                })
+                return totaal
+            },
+            totaalAantalItems: function() {
+                let totaal = 0;
+                if (this.items.length > 0) {
+                    this.items.forEach(item => {
+                        if (item.besteld > 0) {
+                            totaal += parseInt(item.besteld)
+                        }
+                    })
+                }
+                return totaal
+            }
+        },
+        mounted() {
+            if (localStorage.getItem("winkelwagen")) {
+                this.items = JSON.parse(localStorage.getItem("winkelwagen"))
+            }
+            if (localStorage.getItem("showCookieMelding")) {
+                this.showCookieMelding = JSON.parse(localStorage.getItem("showCookieMelding"))
+            } else {
+                this.showCookieMelding = true;
+            }
+        }
+    }
+
+    Vue.createApp(app).mount('#app')
+    </script>
+</body>
+
+</html>
