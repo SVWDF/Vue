@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title></title>
+    <title>winkelwagen</title>
     <meta charset="utf-8">
     <style type="text/css">
     body,
@@ -91,6 +91,15 @@
     #winkelwagen {
         text-align: right;
     }
+
+    .itemTransition-leave-to {
+        opacity: 0;
+        transform: translateX(-150px);
+    }
+
+    .itemTransition-leave-active {
+        transition: all .65s ease-in-out;
+    }
     </style>
     <script src="https://unpkg.com/vue@next"></script>
 </head>
@@ -110,19 +119,23 @@
         <section id="inhoud">
             <h4>Gekozen items</h4>
             <section id="nieuwe-items">
-                <div v-if="items.length > 0">
-                    <div class="item" v-for='(item,index) in items' :key='item.id'>
-                        <div class="item-img">
-                            <img v-bind:src="pathSmall +item.src" v-on:click="toonGroteFoto(item.src)">
-                        </div>
-                        <div class="item-body">
-                            <div class="prijs">{{(parseFloat(item.prijs) * parseFloat(item.besteld)).toFixed(2)}}€</div>
-                            <h4>{{item.naam}}</h4>
-                            <p>{{item.omschrijving}}</p>
-                            <input type="number" v-model="item.besteld" size="2" v-on:change="aantalAanpassing(index)">
-                            <a href="#" class="knop" v-on:click="verwijder(index)">verwijder</a>
-                        </div>
-                    </div>
+                <transition name="itemTransition">
+                    <div v-if="items.length > 0">
+                        <transition-group name="itemTransition">
+                            <div class="item" v-for='(item,index) in items' :key='item.id'>
+                                <div class="item-img">
+                                    <img v-bind:src="pathSmall +item.src" v-on:click="toonGroteFoto(item.src)">
+                                </div>
+                                <div class="item-body">
+                                    <div class="prijs">{{(parseFloat(item.prijs) * parseFloat(item.besteld)).toFixed(2)}}€</div>
+                                    <h4>{{item.naam}}</h4>
+                                    <p>{{item.omschrijving}}</p>
+                                    <input type="number" v-model="item.besteld" size="2" v-on:change="aantalAanpassing(index)">
+                                    <a href="#" class="knop" v-on:click="verwijder(index)">verwijder</a>
+                                </div>
+                            </div>
+                        </transition-group>
+                </transition>
                     <div>
                         <p class="totaal">Totaal: {{totalePrijs.toFixed(2)}}</p>
                     </div>
