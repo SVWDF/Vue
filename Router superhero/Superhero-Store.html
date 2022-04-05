@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superhero Store</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
+    <style type="text/css">
+        body,
+        html {
+            font-family: verdana, sans-serif;
+            color: #666;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+
+        header {
+            background: #770000;
+            padding: 20px 60px;
+            margin: 0;
+            color: #ffeedd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #cookies,
+        #inhoud {
+            padding: 20px 30px;
+        }
+
+        a {
+            color: #ffeedd;
+        }
+
+        #cookies {
+            background-color: orange
+        }
+
+        #nieuwe-items {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .item {
+            border: 2px solid #ccc;
+            width: 300px;
+            background-color: #fff;
+            text-align: center;
+            height: 550px
+        }
+
+        .besteld {
+            position: relative;
+            top: -250px;
+            color: white;
+            font-size: 29px;
+            background: green
+        }
+
+        .item-img {
+            width: 300px;
+            height: 300px;
+            background-color: #ddd;
+        }
+
+        .item-img img {
+            cursor: pointer;
+        }
+
+        .item-body {
+            padding: 25px;
+            color: #789;
+        }
+
+        .item-body h4 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .item-body .prijs {
+            font-size: 2em;
+            color: #009900;
+            margin-bottom: 25px;
+        }
+
+        .knop {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #009900;
+            color: #ffffff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            letter-spacing: 1px;
+        }
+
+        #bestel_items {
+            background-color: #009900;
+            width: 230px;
+            height: 40px;
+            color: white;
+            font-size: 28px;
+            position: relative;
+            left: 50%;
+            margin-top: -50px;
+            transform: translate(-50%);
+        }
+
+        #aantal_items {
+            text-align: right;
+        }
+
+        #nieuwe-items-winkelwagen {
+            display: flex-row;
+            justify-content: space-between;
+        }
+
+        .item-winkelwagen {
+            border: 2px solid #ccc;
+            width: 800px;
+            background-color: #fff;
+            text-align: right;
+            margin-bottom: 50px;
+        }
+
+        .item-img-winkelwagen {
+            width: 100px;
+            height: 100px;
+            background-color: #ddd;
+        }
+
+        .router-link {
+            margin-right: 50px;
+            text-decoration: none;
+        }
+
+        .router-link-active {
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header id="main-header">
+            <h1>{{ titel }}</h1>
+            <h5>{{ subtitel }}</h5>
+            <p id="aantal_items">Items in winkelwagen: {{ aantalInWinkelwagen }}</p>
+            <nav>
+                <router-link class="router-link" to="/">Store</router-link>
+                <router-link class="router-link" to="/winkelwagen">Winkelwagen</router-link>
+            </nav>
+        </header>
+        <script type="text/x-template" id="homeTemplate"> 
+            <section v-if="showCookieMelding == null" id="cookies">
+                <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
+                    deze cookies.</p>
+                <input v-on:change="check()" type="checkbox">Deze melding niet meer tonen.
+            </section>
+            <section id="inhoud">
+                <h4>Nieuwe items</h4>
+                <section id="nieuwe-items">
+                    <div class='item' v-for="item in items">
+                        <div class='item-img'>
+                            <img v-on:click="toonGroteFoto(item)" :src="pathSmall + item.afbeelding_src">
+                        </div>
+                        <div v-if="item.besteld > 0" id="bestel_items">
+                            <p>Besteld: {{ item.besteld }}</p>
+                        </div>
+                        <div class='item-body'>
+                            <div class='prijs'>{{ item.prijs }}€</div>
+                            <h4>{{ item.naam }}</h4>
+                            <p>{{ item.omschrijving }}</p>
+                            <a href='#' v-on:click.prevent="VoegToeAanWinkelwagen(item); this.$root.aantalInWinkelwagen" class='knop'>BESTEL</a>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </script>
+        <script type="text/x-template" id="winkelwagenTemplate">
+            <section v-if="showCookieMelding == null" id="cookies">
+                <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
+                    deze cookies.</p>
+                <input v-on:change="check()" type="checkbox">Deze melding niet meer tonen.
+            </section>
+            <section id="inhoud">
+                <h4>Gekozen items</h4>
+                <section id="nieuwe-items">
+                    <div v-if="totaalAantalItems > 0">
+                        <div class="item" v-for="(item, index) in items">
+                            <div class="item-img"><img v-on:click="toonGroteFoto(item)" :src="pathSmall + item.afbeelding_src">
+                            </div>
+                            <div class="item-body">
+                                <div class="prijs">{{ item.prijs }}€</div>
+                                <h4>{{ item.naam }}</h4>
+                                <p>{{ item.omschrijving }}</p>
+                                <input type="number" size="2" :value="item.besteld" v-model="item.besteld" v-on:change="aantalAanpassing(index)">
+                                <a href="#" v-on:click="verwijder(index)" class="knop">verwijder</a>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="totaal">Totaal: {{ totalePrijs }}€</p>
+                        </div>
+                    </div>
+                    <div v-if="totaalAantalItems == 0">
+                        <p>Geen items</p>
+                    </div>
+                </section>
+            </section>
+        </script>
+        <router-view></router-view>
+    </div>
+    <script src="./scripts/home.js"></script>
+    <script src="./scripts/winkelwagen.js"></script>
+    <script>
+        const app = {
+            data: function () {
+                return {
+                    titel: 'Superhero Store',
+                    subtitel: 'Your break from the office life!',
+                    aantalInWinkelwagen: 0,
+                }
+            }
+        }
+
+        const router = new VueRouter.createRouter({
+            history: VueRouter.createWebHashHistory(),
+            routes: [
+                {path: '/', name: 'Store', component: store},
+                {path: '/winkelwagen', name: 'Winkelwagen', component: winkelwagen}
+            ]
+        })
+
+        Vue.createApp(app).use(router).mount('#app')
+    </script>
+</body>
+</html>
